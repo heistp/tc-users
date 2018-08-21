@@ -15,6 +15,9 @@
 
 //#define DEBUG 1
 
+//#define IPV6_SUPPORT_V1
+//#define IPV6_SUPPORT_V2
+
 #define DEFAULT_CLASS 1
 #define MAX_ELEM 65536*4
 #define IP4_ALEN 4
@@ -128,6 +131,9 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 	uint16_t *classid)
 {
 	enum cstat cs = NOMATCH;
+#ifdef IPV6_SUPPORT_V2
+	uint8_t ip6addr[IP6_ALEN];
+#endif
 
 	switch (caddr) {
 	case CLASSIFY_ADDR_NONE:
@@ -147,17 +153,26 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 		if (h->ip4) {
 			cs = classify_ip4(&h->ip4->saddr, classid);
 		} else if (h->ip6) {
-			//memcpy(ip6addr, &h->ip6->saddr.in6_u.u6_addr8, IP6_ALEN);
-			//cs = classify_ip6(&ip6addr, classid);
-			//cs = classify_ip6(&h->ip6->saddr, classid);
+#ifdef IPV6_SUPPORT_V1
+			cs = classify_ip6(&h->ip6->saddr, classid);
+#endif
+#ifdef IPV6_SUPPORT_V2
+			memcpy(ip6addr, &h->ip6->saddr, IP6_ALEN);
+			cs = classify_ip6(ip6addr, classid);
+#endif
 		}
 		break;
 	case DST_IP:
 		if (h->ip4) {
 			cs = classify_ip4(&h->ip4->daddr, classid);
 		} else if (h->ip6) {
-			//memcpy(ip6addr, &h->ip6->daddr.in6_u.u6_addr8, IP6_ALEN);
-			//cs = classify_ip6(&h->ip6->daddr, classid);
+#ifdef IPV6_SUPPORT_V1
+			cs = classify_ip6(&h->ip6->daddr, classid);
+#endif
+#ifdef IPV6_SUPPORT_V2
+			memcpy(ip6addr, &h->ip6->daddr, IP6_ALEN);
+			cs = classify_ip6(ip6addr, classid);
+#endif
 		}
 		break;
 	default:
