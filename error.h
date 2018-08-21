@@ -1,0 +1,61 @@
+#ifndef __ERROR_H
+#define __ERROR_H
+
+#include "limits.h"
+
+// Error codes.
+enum err_code {
+	E_EOF,
+	E_UNKNOWN_OPT,
+	E_GETOPT_FAIL,
+	E_TOO_MANY_ARGS,
+	E_FILE_ARG_REQUIRED,
+	E_OPEN_INPUT_FILE_FAILED,
+	E_NO_INPUT,
+	E_EMPTY_RANGE,
+	E_INVALID_RANGE,
+	E_INVALID_RANGE_VALUE,
+	E_INVALID_U16_VALUE,
+	E_INVALID_CLASSIFY_BY_OPTION,
+	E_INVALID_CLASSIFY_BY_ADDR,
+	E_INVALID_CLASSIFY_BY_TOO_LONG,
+	E_INVALID_CLASSIFY_BY_REPEAT,
+	E_FLOW_RANGES_OVERLAP,
+	E_INVALID_MIN_FLOWS_PER_USER,
+	E_INVALID_MAX_FLOWS_PER_USER,
+	E_USER_FLOWS_SIZE_NOT_MULTIPLE_MIN,
+	E_USER_FLOWS_SIZE_NOT_MULTIPLE_MAX,
+	E_UNCL_FLOWS_SIZE_NOT_POW2,
+	E_LONG_LINE,
+	E_TOO_FEW_FIELDS,
+	E_USERID_EMPTY,
+	E_USERID_LONG,
+	E_INVALID_MAC,
+	E_UNKNOWN_ADDR_TYPE,
+	E_UNKNOWN_ADDR_FORMAT,
+	E_INVALID_IP4_ADDR,
+	E_INVALID_IP6_ADDR,
+	E_IP4_STR_ERROR,
+	E_IP6_STR_ERROR,
+	E_TOO_MANY_FIELDS,
+	E_BPF_OBJ_GET_FAIL,
+	E_BPF_UPDATE_ELEM_FAIL,
+	E_BPF_GET_NEXT_KEY_FAIL,
+	E_BPF_LOOKUP_ELEM_FAIL,
+	E_BPF_DELETE_ELEM_FAIL,
+	E_MAX,
+};
+
+// Error (code and message).
+typedef struct {
+	enum err_code code;
+	char message[MAX_ERROR_STRLEN+1];
+} error_t;
+
+// Sets and returns the global error.
+error_t *error(enum err_code code);
+
+// Sets and returns the global error with a message.
+error_t *errorf(enum err_code code, const char *fmt, ...);
+
+#endif
