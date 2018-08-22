@@ -245,6 +245,10 @@ int act_main(struct __sk_buff *skb)
 	uint16_t classid;
 	bpf_config *cfg;
 
+#ifdef DEBUG
+	printk("act_main\n");
+#endif
+
 	if ((cfg = map_lookup_elem(&tc_users_config, &ck)) == NULL) {
 		goto out;
 	}
