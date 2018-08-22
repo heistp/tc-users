@@ -16,7 +16,7 @@
 
 //#define IPV6_SUPPORT_V1
 //#define IPV6_SUPPORT_V2
-//#define IPV6_SUPPORT_V3
+#define IPV6_SUPPORT_V3
 //#define IPV6_SUPPORT_V4
 
 #ifdef IPv6_SUPPORT_V2
@@ -139,9 +139,6 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 #if defined(IPV6_SUPPORT_V2) || defined(IPV6_SUPPORT_V3) || defined(IPV6_SUPPORT_V4)
 	uint8_t ip6addr[IP6_ALEN];
 #endif
-#ifdef IPV6_SUPPORT_V3
-	int i;
-#endif
 
 	switch (caddr) {
 	case CLASSIFY_ADDR_NONE:
@@ -169,9 +166,22 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 			cs = classify_ip6(ip6addr, classid);
 #endif
 #ifdef IPV6_SUPPORT_V3
-			for (i = 0; i < IP6_ALEN; i++) {
-				ip6addr[i] = h->ip6->saddr.in6_u.u6_addr8[i];
-			}
+			ip6addr[0] = h->ip6->saddr.in6_u.u6_addr8[0];
+			ip6addr[1] = h->ip6->saddr.in6_u.u6_addr8[1];
+			ip6addr[2] = h->ip6->saddr.in6_u.u6_addr8[2];
+			ip6addr[3] = h->ip6->saddr.in6_u.u6_addr8[3];
+			ip6addr[4] = h->ip6->saddr.in6_u.u6_addr8[4];
+			ip6addr[5] = h->ip6->saddr.in6_u.u6_addr8[5];
+			ip6addr[6] = h->ip6->saddr.in6_u.u6_addr8[6];
+			ip6addr[7] = h->ip6->saddr.in6_u.u6_addr8[7];
+			ip6addr[8] = h->ip6->saddr.in6_u.u6_addr8[8];
+			ip6addr[9] = h->ip6->saddr.in6_u.u6_addr8[9];
+			ip6addr[10] = h->ip6->saddr.in6_u.u6_addr8[10];
+			ip6addr[11] = h->ip6->saddr.in6_u.u6_addr8[11];
+			ip6addr[12] = h->ip6->saddr.in6_u.u6_addr8[12];
+			ip6addr[13] = h->ip6->saddr.in6_u.u6_addr8[13];
+			ip6addr[14] = h->ip6->saddr.in6_u.u6_addr8[14];
+			ip6addr[15] = h->ip6->saddr.in6_u.u6_addr8[15];
 			cs = classify_ip6(ip6addr, classid);
 #endif
 #ifdef IPV6_SUPPORT_V4
@@ -192,9 +202,22 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 			cs = classify_ip6(ip6addr, classid);
 #endif
 #ifdef IPV6_SUPPORT_V3
-			for (i = 0; i < IP6_ALEN; i++) {
-				ip6addr[i] = h->ip6->daddr.in6_u.u6_addr8[i];
-			}
+			ip6addr[0] = h->ip6->daddr.in6_u.u6_addr8[0];
+			ip6addr[1] = h->ip6->daddr.in6_u.u6_addr8[1];
+			ip6addr[2] = h->ip6->daddr.in6_u.u6_addr8[2];
+			ip6addr[3] = h->ip6->daddr.in6_u.u6_addr8[3];
+			ip6addr[4] = h->ip6->daddr.in6_u.u6_addr8[4];
+			ip6addr[5] = h->ip6->daddr.in6_u.u6_addr8[5];
+			ip6addr[6] = h->ip6->daddr.in6_u.u6_addr8[6];
+			ip6addr[7] = h->ip6->daddr.in6_u.u6_addr8[7];
+			ip6addr[8] = h->ip6->daddr.in6_u.u6_addr8[8];
+			ip6addr[9] = h->ip6->daddr.in6_u.u6_addr8[9];
+			ip6addr[10] = h->ip6->daddr.in6_u.u6_addr8[10];
+			ip6addr[11] = h->ip6->daddr.in6_u.u6_addr8[11];
+			ip6addr[12] = h->ip6->daddr.in6_u.u6_addr8[12];
+			ip6addr[13] = h->ip6->daddr.in6_u.u6_addr8[13];
+			ip6addr[14] = h->ip6->daddr.in6_u.u6_addr8[14];
+			ip6addr[15] = h->ip6->daddr.in6_u.u6_addr8[15];
 			cs = classify_ip6(ip6addr, classid);
 #endif
 #ifdef IPV6_SUPPORT_V4
