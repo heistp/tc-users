@@ -16,7 +16,7 @@
 
 //#define IPV6_SUPPORT_V1
 //#define IPV6_SUPPORT_V2
-#define IPV6_SUPPORT_V3
+//#define IPV6_SUPPORT_V3
 //#define IPV6_SUPPORT_V4
 
 #ifdef IPv6_SUPPORT_V2
