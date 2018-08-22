@@ -13,7 +13,7 @@
 
 #include "bpf_config.h"
 
-//#define DEBUG 1
+//#define TCU_DEBUG 1
 
 //#define IPV6_SUPPORT_V1
 //#define IPV6_SUPPORT_V2
@@ -30,7 +30,7 @@
    (*NAME)(__VA_ARGS__) = (void *)BPF_FUNC_##NAME
 #endif
 
-#ifdef DEBUG
+#ifdef TCU_DEBUG
 #ifndef printk
 # define printk(fmt, ...)                                      \
     ({                                                         \
@@ -245,7 +245,7 @@ int act_main(struct __sk_buff *skb)
 	uint16_t classid;
 	bpf_config *cfg;
 
-#ifdef DEBUG
+#ifdef TCU_DEBUG
 	printk("act_main\n");
 #endif
 
@@ -260,7 +260,7 @@ int act_main(struct __sk_buff *skb)
 out:
 
 	if (cstat == MATCH) {
-#ifdef DEBUG
+#ifdef TCU_DEBUG
 		printk("class: %u\n", classid);
 #endif
 		skb->tc_classid = TC_H_MAKE(TC_H_ROOT, classid);
