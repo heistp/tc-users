@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IFACE=ens33
-QDISC="cake"
+QDISC="cake hosts"
 #QDISC="fq_codel"
 #QDISC="sfq"
 

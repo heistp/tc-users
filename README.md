@@ -14,7 +14,6 @@ addresses. It's a work in progress.
 # Tasks
 
 - For version 0.1 (i.e. usable):
-  - Finish implementing flow fairness for users and unclassified flows
   - Improve output:
     - Warn on conflicting user ID mappings during classify
     - Print summary stats at end of each step, including time taken

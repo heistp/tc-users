@@ -91,7 +91,6 @@ inline uint16_t classify_mac(const unsigned char mac[ETH_ALEN], enum cstat *csta
 	uint16_t *match;
 
 	if ((match = map_lookup_elem(&tc_users_mac, mac)) == NULL) {
-		*cstat = NOMATCH;
 		return 0;
 	}
 
@@ -104,7 +103,6 @@ inline uint16_t classify_ip4(const void *ip4addr, enum cstat *cstat) {
 	uint16_t *match;
 
 	if ((match = map_lookup_elem(&tc_users_ip4, ip4addr)) == NULL) {
-		*cstat = NOMATCH;
 		return 0;
 	}
 
@@ -117,7 +115,6 @@ inline uint16_t classify_ip6(const void *ip6addr, enum cstat *cstat) {
 	uint16_t *match;
 
 	if ((match = map_lookup_elem(&tc_users_ip6, ip6addr)) == NULL) {
-		*cstat = NOMATCH;
 		return 0;
 	}
 
@@ -129,8 +126,9 @@ __attribute__((always_inline))
 inline uint16_t classify_by_addr(const classify_addr caddr, const struct hdrs *h,
 	enum cstat *cstat)
 {
-	uint16_t classid = 0;
+	uint8_t ip4addr[IP4_ALEN];
 	uint8_t ip6addr[IP6_ALEN];
+	uint16_t classid = 0;
 
 	switch (caddr) {
 	case CLASSIFY_ADDR_NONE:
@@ -149,7 +147,8 @@ inline uint16_t classify_by_addr(const classify_addr caddr, const struct hdrs *h
 		break;
 	case SRC_IP:
 		if (h->ip4) {
-			classid = classify_ip4(&h->ip4->saddr, cstat);
+			__builtin_memcpy(ip4addr, &h->ip4->saddr, IP4_ALEN);
+			classid = classify_ip4(ip4addr, cstat);
 		} else if (h->ip6) {
 			__builtin_memcpy(ip6addr, &h->ip6->saddr, IP6_ALEN);
 			classid = classify_ip6(ip6addr, cstat);
@@ -157,7 +156,8 @@ inline uint16_t classify_by_addr(const classify_addr caddr, const struct hdrs *h
 		break;
 	case DST_IP:
 		if (h->ip4) {
-			classid = classify_ip4(&h->ip4->daddr, cstat);
+			__builtin_memcpy(ip4addr, &h->ip4->daddr, IP4_ALEN);
+			classid = classify_ip4(ip4addr, cstat);
 		} else if (h->ip6) {
 			__builtin_memcpy(ip6addr, &h->ip6->daddr, IP6_ALEN);
 			classid = classify_ip6(ip6addr, cstat);
@@ -165,7 +165,6 @@ inline uint16_t classify_by_addr(const classify_addr caddr, const struct hdrs *h
 		break;
 	default:
 		classid = 0;
-		*cstat = NOMATCH;
 		break;
 	}
 
@@ -249,10 +248,10 @@ int act_main(struct __sk_buff *skb)
 out:
 
 	if (cstat == MATCH) {
+		skb->tc_classid = TC_H_MAKE(TC_H_MAJ(classid<<16), 0);
 #ifdef TCU_DEBUG
-		printk("class: %u\n", classid);
+		printk("tc_classid: %u\n", skb->tc_classid);
 #endif
-		skb->tc_classid = TC_H_MAKE(TC_H_ROOT, classid);
 	}
 
 	return TC_ACT_OK;
