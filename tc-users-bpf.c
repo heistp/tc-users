@@ -17,6 +17,7 @@
 //#define IPV6_SUPPORT_V1
 //#define IPV6_SUPPORT_V2
 //#define IPV6_SUPPORT_V3
+//#define IPV6_SUPPORT_V4
 
 #ifdef IPv6_SUPPORT_V2
 #include <string.h>
@@ -135,7 +136,7 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 	uint16_t *classid)
 {
 	enum cstat cs = NOMATCH;
-#if defined(IPV6_SUPPORT_V2) || defined(IPV6_SUPPORT_V3)
+#if defined(IPV6_SUPPORT_V2) || defined(IPV6_SUPPORT_V3) || defined(IPV6_SUPPORT_V4)
 	uint8_t ip6addr[IP6_ALEN];
 #endif
 #ifdef IPV6_SUPPORT_V3
@@ -173,6 +174,10 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 			}
 			cs = classify_ip6(ip6addr, classid);
 #endif
+#ifdef IPV6_SUPPORT_V4
+			__builtin_memcpy(ip6addr, &h->ip6->saddr, IP6_ALEN);
+			cs = classify_ip6(ip6addr, classid);
+#endif
 		}
 		break;
 	case DST_IP:
@@ -190,6 +195,10 @@ inline enum cstat classify_by_addr(const classify_addr caddr, const struct hdrs 
 			for (i = 0; i < IP6_ALEN; i++) {
 				ip6addr[i] = h->ip6->daddr.in6_u.u6_addr8[i];
 			}
+			cs = classify_ip6(ip6addr, classid);
+#endif
+#ifdef IPV6_SUPPORT_V4
+			__builtin_memcpy(ip6addr, &h->ip6->daddr, IP6_ALEN);
 			cs = classify_ip6(ip6addr, classid);
 #endif
 		}
