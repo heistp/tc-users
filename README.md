@@ -21,7 +21,6 @@ addresses. It's a work in progress.
     - Print logging in a standard way
     - If needed, support wrapped errors so as not to lose detail
     - Give more detailed error reporting for min and max flows per user
-  - Get IPv6 working
   - Docs / man page
 - For later:
   - Add subnet support with LPM trie

@@ -1,7 +1,7 @@
 CC=clang
 LD=llc
 OUTPUT_OPTION=-MMD -MP -o $@
-CFLAGS=-O2 -Wall
+CFLAGS=-O2 -Wall -g
 
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
